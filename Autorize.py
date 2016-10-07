@@ -45,6 +45,7 @@ from thread import start_new_thread
 from javax.swing import RowFilter
 from javax.swing.table import TableRowSorter
 from javax.swing import JScrollPane
+from javax.swing import BoxLayout
 from java.awt import Font
 import csv
 import sys
@@ -115,49 +116,39 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
         """
 
         filterLModified = JLabel("Modified:")
-        filterLModified.setBounds(10, 10, 100, 30)
 
         filterLUnauthenticated = JLabel("Unauthenticated:")
-        filterLUnauthenticated.setBounds(250, 10, 100, 30)
 
         self.showAuthBypassModified = JCheckBox("Authorization bypass!")
-        self.showAuthBypassModified.setBounds(10, 35, 200, 30)
         self.showAuthBypassModified.setSelected(True)
         self.showAuthBypassModified.addItemListener(tabTableFilter(self))
 
         self.showAuthPotentiallyEnforcedModified = JCheckBox("Authorization enforced???")
-        self.showAuthPotentiallyEnforcedModified.setBounds(10, 60, 200, 30)
         self.showAuthPotentiallyEnforcedModified.setSelected(True)
         self.showAuthPotentiallyEnforcedModified.addItemListener(tabTableFilter(self))
 
         self.showAuthEnforcedModified = JCheckBox("Authorization enforced!")
-        self.showAuthEnforcedModified.setBounds(10, 85, 200, 30)
         self.showAuthEnforcedModified.setSelected(True)
         self.showAuthEnforcedModified.addItemListener(tabTableFilter(self))
 
         self.showAuthBypassUnauthenticated = JCheckBox("Authorization bypass!")
-        self.showAuthBypassUnauthenticated.setBounds(250, 35, 200, 30)
         self.showAuthBypassUnauthenticated.setSelected(True)
         self.showAuthBypassUnauthenticated.addItemListener(tabTableFilter(self))
 
         self.showAuthPotentiallyEnforcedUnauthenticated = JCheckBox("Authorization enforced???")
-        self.showAuthPotentiallyEnforcedUnauthenticated.setBounds(250, 60, 200, 30)
         self.showAuthPotentiallyEnforcedUnauthenticated.setSelected(True)
         self.showAuthPotentiallyEnforcedUnauthenticated.addItemListener(tabTableFilter(self))
 
         self.showAuthEnforcedUnauthenticated = JCheckBox("Authorization enforced!")
-        self.showAuthEnforcedUnauthenticated.setBounds(250, 85, 200, 30)
         self.showAuthEnforcedUnauthenticated.setSelected(True)
         self.showAuthEnforcedUnauthenticated.addItemListener(tabTableFilter(self))
 
         self.showDisabledUnauthenticated = JCheckBox("Disabled")
-        self.showDisabledUnauthenticated.setBounds(250, 110, 200, 30)
         self.showDisabledUnauthenticated.setSelected(True)
         self.showDisabledUnauthenticated.addItemListener(tabTableFilter(self))        
 
         self.filterPnl = JPanel()
-        self.filterPnl.setLayout(None)
-        self.filterPnl.setBounds(0, 0, 1000, 1000)
+	self.filterPnl.setLayout(BoxLayout(self.filterPnl,BoxLayout.PAGE_AXIS))
 
         self.filterPnl.add(filterLModified)
         self.filterPnl.add(filterLUnauthenticated)
@@ -174,41 +165,35 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
         """
 
         exportLabel = JLabel("Export:")
-        exportLabel.setBounds(10, 10, 100, 30)
+
         labelFont = exportLabel.getFont()
         boldFont = Font(labelFont.getFontName(), Font.BOLD, labelFont.getSize())
         exportLabel.setFont(boldFont)
 
         exportLType = JLabel("File Type:")
-        exportLType.setBounds(10, 50, 100, 30)
 
         exportFileTypes = ["HTML","CSV"]
         self.exportType = JComboBox(exportFileTypes)
-        self.exportType.setBounds(100, 50, 200, 30)
+	self.exportType.setMaximumSize(Dimension(200,30))
 
         exportES = ["All Statuses", "As table filter", self._enfocementStatuses[0], self._enfocementStatuses[1], self._enfocementStatuses[2]]
         self.exportES = JComboBox(exportES)
-        self.exportES.setBounds(100, 90, 200, 30)
+	self.exportES.setMaximumSize(Dimension(700,30))
 
         exportLES = JLabel("Statuses:")
-        exportLES.setBounds(10, 90, 100, 30)
 
         self.exportButton = JButton("Export",actionPerformed=self.export)
-        self.exportButton.setBounds(390, 65, 100, 30)
 
         saveRestoreLabel = JLabel("Save / Restore:")
-        saveRestoreLabel.setBounds(10, 150, 100, 30)    
         saveRestoreLabel.setFont(boldFont)    
 
         self.saveStateButton = JButton("Save state",actionPerformed=self.saveStateAction)
-        self.saveStateButton.setBounds(10, 200, 100, 30)
 
         self.restoreStateButton = JButton("Restore state",actionPerformed=self.restoreStateAction)
-        self.restoreStateButton.setBounds(390, 200, 100, 30)        
+
 
         self.exportPnl = JPanel()
-        self.exportPnl.setLayout(None)
-        self.exportPnl.setBounds(0, 0, 1000, 1000)
+	self.exportPnl.setLayout(BoxLayout(self.exportPnl,BoxLayout.Y_AXIS))
         self.exportPnl.add(exportLabel)
         self.exportPnl.add(exportLType)
         self.exportPnl.add(self.exportType)
@@ -228,46 +213,37 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
         self.EDCT = ArrayList()
 
         EDLType = JLabel("Type:")
-        EDLType.setBounds(10, 10, 140, 30)
 
         EDLContent = JLabel("Content:")
-        EDLContent.setBounds(10, 50, 140, 30)
 
         EDLabelList = JLabel("Filter List:")
-        EDLabelList.setBounds(10, 165, 140, 30)
 
         EDStrings = ["Headers (simple string): (enforced message headers contains)", "Headers (regex): (enforced message headers contains)", "Body (simple string): (enforced message body contains)", "Body (regex): (enforced message body contains)", "Full response (simple string): (enforced message contains)", "Full response (regex): (enforced message contains)", "Full response length: (of enforced response)"]
         self.EDType = JComboBox(EDStrings)
-        self.EDType.setBounds(80, 10, 430, 30)
+	self.EDType.setMaximumSize(Dimension(500,30))
        
         self.EDText = JTextArea("", 5, 30)
 
         scrollEDText = JScrollPane(self.EDText)
         scrollEDText.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED)
-        scrollEDText.setBounds(80, 50, 300, 110)  
 
         self.EDModel = DefaultListModel()
         self.EDList = JList(self.EDModel)
 
         scrollEDList = JScrollPane(self.EDList)
         scrollEDList.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED)
-        scrollEDList.setBounds(80, 175, 300, 110)
         scrollEDList.setBorder(LineBorder(Color.BLACK)) 
 
         self.EDAdd = JButton("Add filter",actionPerformed=self.addEDFilter)
-        self.EDAdd.setBounds(390, 85, 120, 30)
         self.EDDel = JButton("Remove filter",actionPerformed=self.delEDFilter)
-        self.EDDel.setBounds(390, 210, 120, 30)
         self.EDMod = JButton("Modify filter",actionPerformed=self.modEDFilter)
-        self.EDMod.setBounds(390, 250, 120, 30)
 
         AndOrStrings = ["And","Or"]
         self.AndOrType = JComboBox(AndOrStrings)
-        self.AndOrType.setBounds(390, 170, 120, 30)       
+	self.AndOrType.setMaximumSize(Dimension(500,30))
 
         self.EDPnl = JPanel()
-        self.EDPnl.setLayout(None)
-        self.EDPnl.setBounds(0, 0, 1000, 1000)
+	self.EDPnl.setLayout(BoxLayout(self.EDPnl,BoxLayout.Y_AXIS))
         self.EDPnl.add(EDLType)
         self.EDPnl.add(self.EDType)
         self.EDPnl.add(EDLContent)
@@ -284,46 +260,37 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
         """
 
         EDLType = JLabel("Type:")
-        EDLType.setBounds(10, 10, 140, 30)
 
         EDLContent = JLabel("Content:")
-        EDLContent.setBounds(10, 50, 140, 30)
 
         EDLabelList = JLabel("Filter List:")
-        EDLabelList.setBounds(10, 165, 140, 30)
 
         EDStrings = ["Headers (simple string): (enforced message headers contains)", "Headers (regex): (enforced message headers contains)", "Body (simple string): (enforced message body contains)", "Body (regex): (enforced message body contains)", "Full response (simple string): (enforced message contains)", "Full response (regex): (enforced message contains)", "Full response length: (of enforced response)"]
         self.EDTypeUnauth = JComboBox(EDStrings)
-        self.EDTypeUnauth.setBounds(80, 10, 430, 30)
+	self.EDTypeUnauth.setMaximumSize(Dimension(500,30))
        
         self.EDTextUnauth = JTextArea("", 5, 30)
 
         scrollEDTextUnauth = JScrollPane(self.EDTextUnauth)
-        scrollEDTextUnauth.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED)
-        scrollEDTextUnauth.setBounds(80, 50, 300, 110)     
+        scrollEDTextUnauth.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED)  
 
         self.EDModelUnauth = DefaultListModel()
         self.EDListUnauth = JList(self.EDModelUnauth)
 
         scrollEDListUnauth = JScrollPane(self.EDListUnauth)
         scrollEDListUnauth.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED)
-        scrollEDListUnauth.setBounds(80, 175, 300, 110)
         scrollEDListUnauth.setBorder(LineBorder(Color.BLACK))    
 
         self.EDAddUnauth = JButton("Add filter",actionPerformed=self.addEDFilterUnauth)
-        self.EDAddUnauth.setBounds(390, 85, 120, 30)
         self.EDDelUnauth = JButton("Remove filter",actionPerformed=self.delEDFilterUnauth)
-        self.EDDelUnauth.setBounds(390, 210, 120, 30)
         self.EDModUnauth = JButton("Modify filter",actionPerformed=self.modEDFilterUnauth)
-        self.EDModUnauth.setBounds(390, 250, 120, 30)
 
         AndOrStrings = ["And","Or"]
-        self.AndOrTypeUnauth = JComboBox(AndOrStrings)
-        self.AndOrTypeUnauth.setBounds(390, 170, 120, 30)        
+        self.AndOrTypeUnauth = JComboBox(AndOrStrings) 
+	self.AndOrTypeUnauth.setMaximumSize(Dimension(500,30))    
 
         self.EDPnlUnauth = JPanel()
-        self.EDPnlUnauth.setLayout(None)
-        self.EDPnlUnauth.setBounds(0, 0, 1000, 1000)
+	self.EDPnlUnauth.setLayout(BoxLayout(self.EDPnlUnauth,BoxLayout.Y_AXIS))
         self.EDPnlUnauth.add(EDLType)
         self.EDPnlUnauth.add(self.EDTypeUnauth)
         self.EDPnlUnauth.add(EDLContent)
@@ -341,14 +308,12 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
 
         IFStrings = ["Scope items only: (Content is not required)","URL Contains (simple string): ","URL Contains (regex): ","URL Not Contains (simple string): ","URL Not Contains (regex): "]
         self.IFType = JComboBox(IFStrings)
-        self.IFType.setBounds(80, 10, 430, 30)
        
         self.IFModel = DefaultListModel()
         self.IFList = JList(self.IFModel)
 
         scrollIFList = JScrollPane(self.IFList)
         scrollIFList.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED)
-        scrollIFList.setBounds(80, 175, 300, 110)
         scrollIFList.setBorder(LineBorder(Color.BLACK))
 
         # Adding some default interception filters
@@ -359,27 +324,19 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
 
         scrollIFText = JScrollPane(self.IFText)
         scrollIFText.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED)
-        scrollIFText.setBounds(80, 50, 300, 110)
 
         IFLType = JLabel("Type:")
-        IFLType.setBounds(10, 10, 140, 30)
 
         IFLContent = JLabel("Content:")
-        IFLContent.setBounds(10, 50, 140, 30)
 
         IFLabelList = JLabel("Filter List:")
-        IFLabelList.setBounds(10, 165, 140, 30)
 
         self.IFAdd = JButton("Add filter",actionPerformed=self.addIFFilter)
-        self.IFAdd.setBounds(390, 85, 120, 30)
         self.IFDel = JButton("Remove filter",actionPerformed=self.delIFFilter)
-        self.IFDel.setBounds(390, 210, 120, 30)
         self.IFMod = JButton("Modify filter",actionPerformed=self.modIFFilter)
-        self.IFMod.setBounds(390, 250, 120, 30)
 
         self.filtersPnl = JPanel()
         self.filtersPnl.setLayout(None)
-        self.filtersPnl.setBounds(0, 0, 1000, 1000)
         self.filtersPnl.add(IFLType)
         self.filtersPnl.add(self.IFType)
         self.filtersPnl.add(IFLContent)
@@ -396,39 +353,28 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
         """
 
         self.prevent304 = JCheckBox("Prevent 304 Not Modified status code")
-        self.prevent304.setBounds(290, 25, 300, 30)
-
         self.ignore304 = JCheckBox("Ignore 304/204 status code responses")
-        self.ignore304.setBounds(290, 5, 300, 30)
         self.ignore304.setSelected(True)
 
         self.autoScroll = JCheckBox("Auto Scroll")
-        #self.autoScroll.setBounds(290, 45, 140, 30)
-        self.autoScroll.setBounds(160, 40, 140, 30)
 
         self.doUnauthorizedRequest = JCheckBox("Check unauthenticated")
-        self.doUnauthorizedRequest.setBounds(290, 45, 300, 30)
         self.doUnauthorizedRequest.setSelected(True)
 
         startLabel = JLabel("Authorization checks:")
-        startLabel.setBounds(10, 10, 140, 30)
         self.startButton = JButton("Autorize is off",actionPerformed=self.startOrStop)
-        self.startButton.setBounds(160, 10, 120, 30)
         self.startButton.setBackground(Color(255, 100, 91, 255))
 
         self.clearButton = JButton("Clear List",actionPerformed=self.clearList)
-        self.clearButton.setBounds(10, 40, 100, 30)
 
         self.replaceString = JTextArea("Cookie: Insert=injected; header=here;", 5, 30)
         self.replaceString.setWrapStyleWord(True)
         self.replaceString.setLineWrap(True)
         scrollReplaceString = JScrollPane(self.replaceString)
         scrollReplaceString.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED)
-        scrollReplaceString.setBounds(10, 80, 470, 150)
 
         self.fetchButton = JButton("Fetch cookies from last request", actionPerformed=self.fetchCookies)
         self.fetchButton.setEnabled(False)
-        self.fetchButton.setBounds(10, 235, 250, 30)
 
         self.filtersTabs = JTabbedPane()
         self.filtersTabs.addTab("Enforcement Detector", self.EDPnl)
@@ -437,11 +383,8 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
         self.filtersTabs.addTab("Table Filter", self.filterPnl)
         self.filtersTabs.addTab("Save/Restore", self.exportPnl)
 
-        self.filtersTabs.setBounds(0, 280, 2000, 700)
-
         self.pnl = JPanel()
-        self.pnl.setBounds(0, 0, 1000, 1000)
-        self.pnl.setLayout(None)
+        self.pnl.setLayout(BoxLayout(self.pnl, BoxLayout.PAGE_AXIS))
         self.pnl.add(self.startButton)
         self.pnl.add(self.clearButton)
         self.pnl.add(scrollReplaceString)
