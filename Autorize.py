@@ -308,6 +308,7 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
 
         IFStrings = ["Scope items only: (Content is not required)","URL Contains (simple string): ","URL Contains (regex): ","URL Not Contains (simple string): ","URL Not Contains (regex): "]
         self.IFType = JComboBox(IFStrings)
+	self.IFType.setMaximumSize(Dimension(500,30))
        
         self.IFModel = DefaultListModel()
         self.IFList = JList(self.IFModel)
@@ -336,7 +337,7 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
         self.IFMod = JButton("Modify filter",actionPerformed=self.modIFFilter)
 
         self.filtersPnl = JPanel()
-        self.filtersPnl.setLayout(None)
+        self.filtersPnl.setLayout(BoxLayout(self.filtersPnl,BoxLayout.Y_AXIS))
         self.filtersPnl.add(IFLType)
         self.filtersPnl.add(self.IFType)
         self.filtersPnl.add(IFLContent)
@@ -1374,5 +1375,4 @@ class UpdateTableEDT(Runnable):
         else:
             print("Invalid action in UpdateTableEDT")
 
-
-        
+	
